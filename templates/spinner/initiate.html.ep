@@ -1,0 +1,28 @@
+% layout 'default';
+% title 'Github Wheel of Fortune';
+
+<p>Number of projects: <%= $number_of_projects %></p>
+
+<p>
+	<input id="spin" type="button" value="spin" onclick="spin();" />
+</p>
+
+<div id="project"></div>
+
+<p>Last database update: <%= $last_db_update %> </p>
+
+<script>
+document.getElementById("spin").onclick = function () { 
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			var json_struct = JSON.parse( xhttp.responseText );
+			var html_string = '<a href="' + json_struct.data.url + '">' + json_struct.data.name + '</a>';
+			document.getElementById("project").innerHTML = html_string;
+		}
+	};
+	xhttp.open("GET", "/spin?number_of_projects=<%= $number_of_projects %>", true);
+	xhttp.send();
+};
+</script>  
